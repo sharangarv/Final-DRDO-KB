@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Laboratories – DRDO KB</title>
+<style>
+  body{font-family:Arial,sans-serif;margin:0;background:#f5f6fa;color:#2d3436}
+  .navbar{background:#1a237e;color:white;padding:12px 24px;display:flex;gap:16px;align-items:center}
+  .navbar h1{margin:0;font-size:1.2rem}.navbar a{color:#90caf9;text-decoration:none}
+  .container{max-width:1000px;margin:24px auto;padding:0 16px}
+  .card{background:white;border-radius:8px;padding:20px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  table{width:100%;border-collapse:collapse}
+  td,th{padding:10px 14px;border-bottom:1px solid #f0f0f0;font-size:.9rem}
+  th{background:#e8eaf6;font-weight:600}a{color:#1565c0}
+</style></head>
+<body>
+<nav class="navbar">
+  <h1>🛡️ DRDO KB</h1>
+  <a href="{% url 'dashboard' %}">Dashboard</a>
+  <a href="{% url 'article_list' %}">Articles</a>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2 style="margin-top:0;color:#1a237e">DRDO Laboratories ({{ labs|length }})</h2>
+    <table>
+      <tr><th>Acronym</th><th>Name</th><th>City</th><th>Cluster</th><th>Articles</th></tr>
+      {% for lab in labs %}
+      <tr>
+        <td><strong>{{ lab.acronym|default:"—" }}</strong></td>
+        <td>{{ lab.name }}</td>
+        <td>{{ lab.city|default:"—" }}</td>
+        <td>{{ lab.cluster|default:"—" }}</td>
+        <td>{{ lab.n }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="color:#999;text-align:center;padding:30px">No labs seeded yet.</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+</body></html>

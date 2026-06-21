@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>{{ article.title }} – DRDO KB</title>
+<style>
+  body{font-family:Arial,sans-serif;margin:0;background:#f5f6fa;color:#2d3436}
+  .navbar{background:#1a237e;color:white;padding:12px 24px;display:flex;gap:16px;align-items:center}
+  .navbar h1{margin:0;font-size:1.2rem}.navbar a{color:#90caf9;text-decoration:none}
+  .container{max-width:860px;margin:24px auto;padding:0 16px}
+  .card{background:white;border-radius:8px;padding:28px;box-shadow:0 2px 6px rgba(0,0,0,.08);margin-bottom:20px}
+  h2{color:#1a237e;margin-top:0}
+  .meta{font-size:.85rem;color:#636e72;margin-bottom:16px;display:flex;gap:14px;flex-wrap:wrap}
+  .badge{background:#e8eaf6;border-radius:12px;padding:2px 10px;font-size:.8rem;color:#3949ab}
+  pre{background:#f5f6fa;padding:16px;border-radius:6px;overflow-x:auto;font-size:.85rem;white-space:pre-wrap}
+  .full-text{line-height:1.7;font-size:.93rem;max-height:600px;overflow-y:auto;border:1px solid #eee;padding:16px;border-radius:4px}
+</style></head>
+<body>
+<nav class="navbar">
+  <h1>🛡️ DRDO KB</h1>
+  <a href="{% url 'dashboard' %}">Dashboard</a>
+  <a href="{% url 'article_list' %}">Articles</a>
+</nav>
+<div class="container">
+  <div class="card">
+    <h2>{{ article.title }}</h2>
+    <div class="meta">
+      <span class="badge">{{ article.content_type }}</span>
+      <span>{{ article.word_count }} words</span>
+      {% if article.published_date %}<span>📅 {{ article.published_date }}</span>{% endif %}
+      {% if article.laboratory %}<span>🏛 {{ article.laboratory }}</span>{% endif %}
+      <a href="{{ article.source_url }}" target="_blank">🔗 Source</a>
+    </div>
+    {% if article.summary %}<blockquote style="border-left:4px solid #1a237e;padding-left:14px;color:#555">{{ article.summary }}</blockquote>{% endif %}
+
+    {% if article.tags.all %}<p><strong>Tags:</strong> {% for t in article.tags.all %}<span class="badge">{{ t.name }}</span> {% endfor %}</p>{% endif %}
+
+    <h3 style="color:#37474f">Full Text</h3>
+    <div class="full-text">{{ article.full_text|linebreaksbr }}</div>
+  </div>
+
+  {% if article.headings %}
+  <div class="card">
+    <h3 style="margin-top:0">Headings</h3>
+    <ul>{% for h in article.headings %}<li><strong>H{{ h.level }}:</strong> {{ h.text }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+
+  {% if article.tables %}
+  <div class="card">
+    <h3 style="margin-top:0">Tables ({{ article.tables|length }})</h3>
+    {% for tbl in article.tables %}
+    <table style="border-collapse:collapse;width:100%;margin-bottom:12px;font-size:.85rem">
+      {% for row in tbl %}
+      <tr>{% for cell in row %}<td style="border:1px solid #ddd;padding:6px 10px">{{ cell }}</td>{% endfor %}</tr>
+      {% endfor %}
+    </table>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+</body></html>
